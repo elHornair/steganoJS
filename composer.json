@@ -1,0 +1,35 @@
+{
+    "name": "elHornair/steganoJS",
+    "type": "playground",
+    "homepage": "https://github.com/elHornair/steganoJS",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "yui/yui3",
+                "version": "3.5.1",
+                "source": {
+                    "url": "git://github.com/yui/yui3.git",
+                    "type": "git",
+                    "reference": "3.5.1"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap",
+                "version": "2.1.0",
+                "dist": {
+                    "url": "http://twitter.github.com/bootstrap/assets/bootstrap.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "yui/yui3": "3.5.1",
+        "twitter/bootstrap": "2.1.0"
+    }
+}
+

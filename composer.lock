@@ -1,0 +1,21 @@
+{
+    "hash": "f03e029ce95dc06a610e89db4d3f13f9",
+    "packages": [
+        {
+            "package": "twitter/bootstrap",
+            "version": "2.1.0"
+        },
+        {
+            "package": "yui/yui3",
+            "version": "3.5.1"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}
