@@ -36,32 +36,35 @@
         <div class="page-header">
             <h1>SteganoJS <small>A demo application</small></h1>
         </div>
-        <div id="content">
-            <div id="container" class="canvas_container">
-                <h2>Container</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
-            </div>
-            <div id="original" class="canvas_container">
-                <h2>Original</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
-            </div>
-            <div id="hidden" class="canvas_container">
-                <h2>Minified Content</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
-            </div>
-            <div id="encrypted" class="canvas_container">
-                <h2>Encrypted</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
-            </div>
-            <div id="decrypted" class="canvas_container">
-                <h2>Decrypted</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
-            </div>
-            <div id="result" class="canvas_container">
-                <h2>Result image</h2>
-            </div>
-        </div>
+        <div id="content"></div>
     </div> <!-- /container -->
+
+    <!-- Frontend templates -->
+    <script type="text/x-template" id="template_home">
+        <div id="container" class="canvas_container">
+            <h2>Container</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="original" class="canvas_container">
+            <h2>Original</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="hidden" class="canvas_container">
+            <h2>Minified Content</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="encrypted" class="canvas_container">
+            <h2>Encrypted</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="decrypted" class="canvas_container">
+            <h2>Decrypted</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="result" class="canvas_container">
+            <h2>Result image</h2>
+        </div>
+    </script>
 
     <!--Le javascript-->
     <script src="vendor/yui/yui3/build/yui/yui-min.js"></script>
