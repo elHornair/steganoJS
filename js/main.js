@@ -35,7 +35,7 @@ YUI({
         setTimeout(function () {
             var minifiedImageData = combiner.minify(originalContext.getImageData(0, 0, 300, 300), 255);// TODO: could we directly pass it the image?
             hiddenContext.putImageData(minifiedImageData, 0, 0);
-        }, 100);// TODO: improve, so that we somehow get an event
+        }, 200);// TODO: improve, so that we somehow get an event
 
         // hide original image in container image
         setTimeout(function () {
@@ -52,7 +52,7 @@ YUI({
         // write extracted image to the DOM as an actual PNG
         setTimeout(function () {
             var imgData = encryptedCanvas.invoke('toDataURL', 'image/png');
-            Y.one('#result').append('<img src="' + imgData + '"/>');
+            Y.one('#result').append('<img src="' + imgData + '" class="thumbnail"/>');
         }, 800);// TODO: improve, so that we somehow get an event
 
     };
