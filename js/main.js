@@ -12,7 +12,8 @@ YUI({
         var containerContext = Y.one('#container canvas').invoke('getContext', '2d'),
             originalContext = Y.one('#original canvas').invoke('getContext', '2d'),
             hiddenContext = Y.one('#hidden canvas').invoke('getContext', '2d'),
-            resultContext = Y.one('#result canvas').invoke('getContext', '2d'),
+            encryptedContext = Y.one('#encrypted canvas').invoke('getContext', '2d'),
+            decryptedContext = Y.one('#decrypted canvas').invoke('getContext', '2d'),
             containerImg = new Image(),
             originalImg = new Image(),
             combiner = new Y.Combiner();
@@ -38,8 +39,14 @@ YUI({
         // hide original image in container image
         setTimeout(function () {
             var combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
-            resultContext.putImageData(combinedImageData, 0, 0);
+            encryptedContext.putImageData(combinedImageData, 0, 0);
         }, 100);// TODO: improve, so that we somehow get an event
+
+        // extract hidden image from container image
+        setTimeout(function () {
+            var extractedImageData = combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
+            decryptedContext.putImageData(extractedImageData, 0, 0);
+        }, 1000);// TODO: improve, so that we somehow get an event
 
     };
 

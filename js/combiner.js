@@ -20,6 +20,12 @@ YUI.add('combiner', function (Y) {
             return (oriVal >= 128) ? 1 : 0;
         },
 
+        // returns the last bit of an integer
+        getLastBit: function (myInt) {
+            var bitString = myInt.toString(2);
+            return parseInt(bitString.charAt(bitString.length-1), 2);
+        },
+
         // minifies an image so each pixel only needs 4 bit
         minify: function (sourceData, multiplier) {
             var originalData = sourceData.data,
@@ -50,6 +56,21 @@ YUI.add('combiner', function (Y) {
             }
 
             return containerData;
+        },
+
+        // extracts an image hidden in the LSBs of an image
+        extract: function (sourceData) {
+            var sourcePixels = sourceData.data,
+                n = sourcePixels.length,
+                i;
+
+            for (i = 0; i < n; i += 4) {
+                sourcePixels[i  ] = this.getLastBit(sourcePixels[i  ]) * 255;
+                sourcePixels[i+1] = this.getLastBit(sourcePixels[i+1]) * 255;
+                sourcePixels[i+2] = this.getLastBit(sourcePixels[i+2]) * 255;
+            }
+
+            return sourceData;
         }
 
     });
