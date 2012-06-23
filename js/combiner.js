@@ -43,7 +43,7 @@ YUI.add('combiner', function (Y) {
                 n = minifiedPixels.length,
                 i;
 
-            for (i = 0; i < 255; i += 4) {
+            for (i = 0; i < n; i += 4) {
                 containerPixels[i  ] = ((containerPixels[i  ] >> 1) << 1) | minifiedPixels[i  ];
                 containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | minifiedPixels[i+1];
                 containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | minifiedPixels[i+2];
