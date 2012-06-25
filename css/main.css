@@ -9,3 +9,15 @@ div.canvas_container {
     float: left;
     padding-right: 10px;
 }
+
+.hidden {
+    display: none;
+}
+
+#dropbox {
+    height: 300px;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 300px;
+    font-size: 3em;
+}
