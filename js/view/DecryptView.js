@@ -1,37 +1,32 @@
-YUI.add('upload-view', function (Y) {
+YUI.add('decrypt-view', function (Y) {
 
     'use strict';
 
-    Y.UploadView = Y.Base.create('uploadView', Y.View, [], {
+    Y.DecryptView = Y.Base.create('decryptView', Y.View, [], {
 
-        _containerImgSrc: 'img/lena.png',
         _fileDropper: null,
 
+        // TODO: move this to a helper and share it
         replaceCanvasByImage: function (canvasElement) {
             var imgData = canvasElement.invoke('toDataURL', 'image/png');
             canvasElement.replace('<img src="' + imgData + '" class="thumbnail"/>');
         },
 
         _handleFileDropped: function (e) {
-            var containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
-                originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
-                encryptedCanvas = this.get('container').one('#encrypted canvas'),
-                encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
-                minifiedImageData,
-                combinedImageData,
+            var originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
+                extractedCanvas = this.get('container').one('#extracted canvas'),
+                extractedContext = extractedCanvas.invoke('getContext', '2d'),
                 originalImg = new Image(),
                 combiner = new Y.Combiner(),
+                extractedImageData,
                 inst = this;
 
-            // minify uploaded image and hide it in container
+            // show encrypted image and extract the hidden image
             originalImg.onload = function () {
                 originalContext.drawImage(originalImg, 0, 0, 300, 300);
 
-                minifiedImageData = combiner.minify(originalContext.getImageData(0, 0, 300, 300), 255);// TODO: could we directly pass it the image?
-                originalContext.putImageData(minifiedImageData, 0, 0);
-
-                combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
-                encryptedContext.putImageData(combinedImageData, 0, 0);
+                extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
+                extractedContext.putImageData(extractedImageData, 0, 0);
 
                 inst.replaceCanvasByImage(encryptedCanvas);
             }
@@ -45,8 +40,6 @@ YUI.add('upload-view', function (Y) {
         },
 
         initUI: function () {
-            var containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
-                containerImg = new Image();
 
             // init fileDropper
             this._fileDropper = new Y.FileDropper({
@@ -56,16 +49,10 @@ YUI.add('upload-view', function (Y) {
             Y.on('filedropper:drop', this._handleFileDropped, this);
 
             this._fileDropper.render();
-
-            // draw container image
-            containerImg.onload = function() {
-                containerContext.drawImage(containerImg, 0, 0, 300, 300);
-            }
-            containerImg.src = this._containerImgSrc;
         },
 
         render: function () {
-            var html = Y.one('#template_upload').getContent(),
+            var html = Y.one('#template_decrypt').getContent(),
                 inst = this;
 
             this.get('container').setHTML(html);

@@ -26,6 +26,7 @@
                     <ul class="nav">
                         <li><a href="/">Home</a></li>
                         <li><a href="/upload">Upload Image</a></li>
+                        <li><a href="/decrypt">Decrypt</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -79,6 +80,20 @@
             </div>
             <div id="encrypted" class="canvas_container">
                 <h2>Result Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="template_decrypt">
+        <div id="dropbox" class="thumbnail">Drop your image here!</div>
+        <div id="resultbox" class="hidden">
+            <div id="original" class="canvas_container">
+                <h2>Original Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+            <div id="extracted" class="canvas_container">
+                <h2>Hidden Image</h2>
                 <canvas width="300" height="300" class="thumbnail"></canvas>
             </div>
         </div>
