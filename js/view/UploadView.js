@@ -5,41 +5,14 @@ YUI.add('upload-view', function (Y) {
     Y.UploadView = Y.Base.create('uploadView', Y.View, [], {
 
         _containerImgSrc: 'img/lena.png',
-
-        _handleFileDrop: function (e, inst) {
-            var files = e._event.dataTransfer.files,
-                file,
-                reader,
-                inst = this;
-
-            e.preventDefault();
-
-            // return if we didn't get a file
-            if (files.length <= 0) {
-                return;
-            }
-
-            file = files[0];
-            reader = new FileReader();
-
-            // init the reader event handlers
-            reader.onload = function (e) {
-                inst.detach('drop', this._handleFileDrop, this);
-                inst.processUploadedImage(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        },
-
-        _handleUnneededEvent: function (e) {
-            e.preventDefault();
-        },
+        _fileDropper: null,
 
         replaceCanvasByImage: function (canvasElement) {
             var imgData = canvasElement.invoke('toDataURL', 'image/png');
             canvasElement.replace('<img src="' + imgData + '" class="thumbnail"/>');
         },
 
-        processUploadedImage: function (src) {
+        _handleFileDropped: function (e) {
             var containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
                 originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
                 encryptedCanvas = this.get('container').one('#encrypted canvas'),
@@ -63,28 +36,32 @@ YUI.add('upload-view', function (Y) {
                 inst.replaceCanvasByImage(encryptedCanvas);
             }
 
-            originalImg.src = src;
+            originalImg.src = e.src;
 
-            // swap contents
-            this.get('container').one('#dropbox').addClass('hidden');
+            // remove filedropper and show result
+            Y.detach('filedropper:drop', this._handleFileDropped, this);
+            this._fileDropper.destroy();
             this.get('container').one('#resultbox').removeClass('hidden');
         },
 
         initUI: function () {
-            var dropbox = this.get('container').one('#dropbox'),
-                containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
+            var containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
                 containerImg = new Image();
 
             // init dropbox
-            dropbox.on('dragover', this._handleUnneededEvent, this);
-            dropbox.on('drop', this._handleFileDrop, this);
+            this._fileDropper = new Y.FileDropper({
+                srcNode: '#dropbox'
+            });
+
+            Y.on('filedropper:drop', this._handleFileDropped, this);
+
+            this._fileDropper.render();
 
             // draw container image
             containerImg.onload = function() {
                 containerContext.drawImage(containerImg, 0, 0, 300, 300);
             }
             containerImg.src = this._containerImgSrc;
-
         },
 
         render: function () {
@@ -96,9 +73,8 @@ YUI.add('upload-view', function (Y) {
             setTimeout(function () {
                 inst.initUI();
             }, 100)// TODO: is there no event or callback for set html?
-
         }
 
     });
 
-}, '0.1', {requires: ['view', 'combiner']});
+}, '0.1', {requires: ['view', 'combiner', 'event-custom']});

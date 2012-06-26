@@ -8,9 +8,12 @@ YUI({
         },
         'upload-view': {
             fullpath: "js/view/UploadView.js"
+        },
+        'file-dropper': {
+            fullpath: "js/widgets/FileDropper.js"
         }
     }
-}).use('node', 'app-base', 'app-transitions', 'home-view', 'upload-view', function (Y) {
+}).use('node', 'app-base', 'app-transitions', 'home-view', 'upload-view', 'file-dropper', function (Y) {
 
     'use strict';
 
