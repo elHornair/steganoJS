@@ -34,14 +34,21 @@ YUI.add('upload-view', function (Y) {
             e.preventDefault();
         },
 
+        replaceCanvasByImage: function (canvasElement) {
+            var imgData = canvasElement.invoke('toDataURL', 'image/png');
+            canvasElement.replace('<img src="' + imgData + '" class="thumbnail"/>');
+        },
+
         processUploadedImage: function (src) {
             var containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
                 originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
-                encryptedContext = this.get('container').one('#encrypted canvas').invoke('getContext', '2d'),
+                encryptedCanvas = this.get('container').one('#encrypted canvas'),
+                encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
                 minifiedImageData,
                 combinedImageData,
                 originalImg = new Image(),
-                combiner = new Y.Combiner();
+                combiner = new Y.Combiner(),
+                inst = this;
 
             // minify uploaded image and hide it in container
             originalImg.onload = function () {
@@ -52,6 +59,8 @@ YUI.add('upload-view', function (Y) {
 
                 combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
                 encryptedContext.putImageData(combinedImageData, 0, 0);
+
+                inst.replaceCanvasByImage(encryptedCanvas);
             }
 
             originalImg.src = src;
