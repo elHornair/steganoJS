@@ -68,6 +68,20 @@
 
     <script type="text/x-template" id="template_upload">
         <div id="dropbox" class="thumbnail">Drop your image here!</div>
+        <div id="resultbox" class="hidden">
+            <div id="container" class="canvas_container">
+                <h2>Container Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+            <div id="original" class="canvas_container">
+                <h2>Uploaded Image (minified)</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+            <div id="encrypted" class="canvas_container">
+                <h2>Result Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+        </div>
     </script>
 
     <!--Le javascript-->

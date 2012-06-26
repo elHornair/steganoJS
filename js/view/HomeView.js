@@ -45,7 +45,7 @@ YUI.add('home-view', function (Y) {
                 decryptedContext.putImageData(extractedImageData, 0, 0);
             }, 500);// TODO: improve, so that we somehow get an event
 
-            // write extracted image to the DOM as an actual PNG
+            // write encrypted image to the DOM as an actual PNG
             setTimeout(function () {
                 var imgData = encryptedCanvas.invoke('toDataURL', 'image/png');
                 Y.one('#result').append('<img src="' + imgData + '" class="thumbnail"/>');
