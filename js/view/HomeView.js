@@ -4,7 +4,7 @@ YUI.add('home-view', function (Y) {
 
     Y.HomeView = Y.Base.create('homeView', Y.View, [], {
 
-        generateImages: function () {
+        initUI: function () {
             var encryptedCanvas = this.get('container').one('#encrypted canvas'),
                 containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
                 originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
@@ -17,11 +17,11 @@ YUI.add('home-view', function (Y) {
 
             // draw original image
             containerImg.onload = function() {
-              containerContext.drawImage(containerImg, 0, 0, 300, 300);
+                containerContext.drawImage(containerImg, 0, 0, 300, 300);
             };
 
             originalImg.onload = function() {
-              originalContext.drawImage(originalImg, 0, 0, 300, 300);
+                originalContext.drawImage(originalImg, 0, 0, 300, 300);
             };
 
             containerImg.src = "img/lena.png";
@@ -35,8 +35,12 @@ YUI.add('home-view', function (Y) {
 
             // hide original image in container image
             setTimeout(function () {
-                var combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
+                //var combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
+                //encryptedContext.putImageData(combinedImageData, 0, 0);
+
+                var combinedImageData = combiner.hideText(containerContext.getImageData(0, 0, 300, 300), 'das ist das haus vom nikolaus');
                 encryptedContext.putImageData(combinedImageData, 0, 0);
+
             }, 200);// TODO: improve, so that we somehow get an event
 
             // extract hidden image from container image
@@ -60,7 +64,7 @@ YUI.add('home-view', function (Y) {
             this.get('container').setHTML(html);
 
             setTimeout(function () {
-                inst.generateImages();
+                inst.initUI();
             }, 100)// TODO: is there no event or callback for set html?
 
         }

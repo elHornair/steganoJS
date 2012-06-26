@@ -26,6 +26,33 @@ YUI.add('combiner', function (Y) {
             return parseInt(bitString.charAt(bitString.length-1), 2);
         },
 
+        _stringToBinary: function (sourceString) {
+            var i = 0,
+                n = sourceString.length,
+                currentCharBits,
+                fillString = '00000000',
+                resultBitString = '';
+
+            for (i = 0; i < n; i+=1) {
+                currentCharBits = fillString + sourceString.charCodeAt(i).toString(2);// if the char code doesn't take a full byte, we fill it with zeros
+                resultBitString += currentCharBits.substr(-8);
+            }
+
+            return resultBitString;
+        },
+
+        _binaryToString: function (sourceBitString) {
+            var i = 0,
+                n = parseInt(sourceBitString.length / 8, 10),
+                resultString = '';
+
+            for (i = 0; i < n; i+=1) {
+                resultString += String.fromCharCode(parseInt(sourceBitString.substr(i*8, 8), 2));
+            }
+
+            return resultString;
+        },
+
         // minifies an image so each pixel only needs 4 bit
         minify: function (sourceData, multiplier) {
             var originalData = sourceData.data,
@@ -56,6 +83,41 @@ YUI.add('combiner', function (Y) {
             }
 
             return containerData;
+        },
+
+        // hides text in an image
+        hideText: function (containerData, textToHide) {
+            var containerPixels = containerData.data,
+                bitStringToHide = this._stringToBinary(textToHide),
+                n = Math.ceil((bitStringToHide.length/3) * 4),
+                i,
+                sourceIndex;
+
+            for (i = 0; i < n; i += 4) {
+                sourceIndex = (i/4) * 3;
+
+                containerPixels[i  ] = ((containerPixels[i  ] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex  ));
+                containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+1));
+                containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
+            }
+
+            return containerData;
+        },
+
+        // extracts text from image
+        extractText: function (sourceData) {
+            var sourcePixels = sourceData.data,
+                n = sourcePixels.length,// TODO: this information should be taken from some information field in the image (use alpha chanel?)
+                i,
+                hiddenBitString = '';
+
+            for (i = 0; i < n; i += 4) {
+                hiddenBitString += this.getLastBit(sourcePixels[i  ]);
+                hiddenBitString += this.getLastBit(sourcePixels[i+1]);
+                hiddenBitString += this.getLastBit(sourcePixels[i+2]);
+            }
+
+            return this._binaryToString(hiddenBitString);
         },
 
         // extracts an image hidden in the LSBs of an image
