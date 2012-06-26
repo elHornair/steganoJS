@@ -5,12 +5,7 @@ YUI.add('decrypt-view', function (Y) {
     Y.DecryptView = Y.Base.create('decryptView', Y.View, [], {
 
         _fileDropper: null,
-
-        // TODO: move this to a helper and share it
-        replaceCanvasByImage: function (canvasElement) {
-            var imgData = canvasElement.invoke('toDataURL', 'image/png');
-            canvasElement.replace('<img src="' + imgData + '" class="thumbnail"/>');
-        },
+        _canvasHelper: new Y.CanvasHelper(),
 
         _handleFileDropped: function (e) {
             var originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
@@ -28,7 +23,7 @@ YUI.add('decrypt-view', function (Y) {
                 extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
                 extractedContext.putImageData(extractedImageData, 0, 0);
 
-                inst.replaceCanvasByImage(encryptedCanvas);
+                inst._canvasHelper.replaceCanvasByImage(extractedCanvas);
             }
 
             originalImg.src = e.src;
@@ -64,4 +59,4 @@ YUI.add('decrypt-view', function (Y) {
 
     });
 
-}, '0.1', {requires: ['view', 'combiner', 'event-custom']});
+}, '0.1', {requires: ['view', 'event-custom', 'combiner', 'canvas-helper']});

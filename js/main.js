@@ -3,6 +3,9 @@ YUI({
         'combiner': {
             fullpath: "js/combiner.js"
         },
+        'canvas-helper': {
+            fullpath: "js/helpers/canvas-helper.js"
+        },
         'home-view': {
             fullpath: "js/view/HomeView.js"
         },

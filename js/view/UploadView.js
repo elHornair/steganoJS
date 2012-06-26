@@ -6,6 +6,7 @@ YUI.add('upload-view', function (Y) {
 
         _containerImgSrc: 'img/lena.png',
         _fileDropper: null,
+        _canvasHelper: new Y.CanvasHelper(),
 
         replaceCanvasByImage: function (canvasElement) {
             var imgData = canvasElement.invoke('toDataURL', 'image/png');
@@ -33,7 +34,7 @@ YUI.add('upload-view', function (Y) {
                 combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
                 encryptedContext.putImageData(combinedImageData, 0, 0);
 
-                inst.replaceCanvasByImage(encryptedCanvas);
+                inst._canvasHelper.replaceCanvasByImage(encryptedCanvas);
             }
 
             originalImg.src = e.src;
@@ -77,4 +78,4 @@ YUI.add('upload-view', function (Y) {
 
     });
 
-}, '0.1', {requires: ['view', 'combiner', 'event-custom']});
+}, '0.1', {requires: ['view', 'combiner', 'event-custom', 'canvas-helper']});
