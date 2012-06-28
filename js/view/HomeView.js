@@ -40,7 +40,6 @@ YUI.add('home-view', function (Y) {
 
                 var combinedImageData = combiner.hideText(containerContext.getImageData(0, 0, 300, 300), 'das ist das haus vom nikolaus');
                 encryptedContext.putImageData(combinedImageData, 0, 0);
-
             }, 200);// TODO: improve, so that we somehow get an event
 
             // extract hidden image from container image

@@ -15,6 +15,11 @@ YUI.add('combiner', function (Y) {
 
     Y.extend(Combiner, Y.Base, {
 
+        CURRENT_VERSION:     '00000001',
+        CONTENT_TYPE_NONE:   '00000000',
+        CONTENT_TYPE_TEXT:   '00000001',
+        CONTENT_TYPE_IMAGE:  '00000010',
+
         // maps an 8-bit value to a 1-bit value
         mapToOneBit: function (oriVal) {
             return (oriVal >= 128) ? 1 : 0;
@@ -53,6 +58,58 @@ YUI.add('combiner', function (Y) {
             return resultString;
         },
 
+        // adds general information about the hidden data
+        _addGeneralInformation: function (containerData, type, contentLength) {
+            var containerPixels = containerData.data,
+                n,
+                i,
+                infoBitString = '';
+
+            // add version
+            infoBitString += this.CURRENT_VERSION;
+
+            // add type
+            infoBitString += type;
+
+            // add content length
+            infoBitString += ('000000000000000000000000' + contentLength.toString(2)).substr(-24);// we normalize the length to take three bytes
+
+            // hide general information in the alpha channel
+            n = 4 * infoBitString.length;
+
+            for (i = 0; i < n; i += 4) {
+                containerPixels[i+3] = ((containerPixels[i+3] >> 1) << 1) | parseInt(infoBitString.charAt(i/4));
+            }
+
+            return containerData;
+        },
+
+        // extracts general information about the hidden data
+        extractGeneralInformation: function (containerData) {
+            var containerPixels = containerData.data,
+                n = (1 + 1 + 3) * 8,// in version 1, this is the length of the general information
+                i,
+                infoBitString = '',
+                containerData = {};
+
+            // extract general info bits
+            for (i = 0; i < 4*n; i += 4) {
+                infoBitString += this.getLastBit(containerPixels[i+3]);
+            }
+
+            // determine version
+            containerData.version = infoBitString.substr(0, 8);
+
+            // determine type
+            containerData.type = infoBitString.substr(8, 8);
+
+            // determine content length
+            containerData.contentLength = infoBitString.substr(18, 32);
+
+            return containerData;
+
+        },
+
         // minifies an image so each pixel only needs 4 bit
         minify: function (sourceData, multiplier) {
             var originalData = sourceData.data,
@@ -71,6 +128,7 @@ YUI.add('combiner', function (Y) {
 
         // combines two images by hiding the second in the first
         combine: function (containerData, sourceData) {
+            // TODO: refactor (rename properly, add general information)
             var containerPixels = containerData.data,
                 minifiedPixels = this.minify(sourceData, 1).data,
                 n = minifiedPixels.length,
@@ -87,6 +145,9 @@ YUI.add('combiner', function (Y) {
 
         // hides text in an image
         hideText: function (containerData, textToHide) {
+
+            textToHide = "---------------" + textToHide;// TODO: do filling in a more proper way
+
             var containerPixels = containerData.data,
                 bitStringToHide = this._stringToBinary(textToHide),
                 n = Math.ceil((bitStringToHide.length/3) * 4),
@@ -101,13 +162,16 @@ YUI.add('combiner', function (Y) {
                 containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
             }
 
+            this._addGeneralInformation(containerData, this.CONTENT_TYPE_TEXT, bitStringToHide.length);
+
             return containerData;
         },
 
         // extracts text from image
-        extractText: function (sourceData) {
+        // textLength: lenght of the text in bits
+        extractText: function (sourceData, textLength) {
             var sourcePixels = sourceData.data,
-                n = sourcePixels.length,// TODO: this information should be taken from some information field in the image (use alpha chanel?)
+                n = (textLength*4) / 3,
                 i,
                 hiddenBitString = '';
 
@@ -117,7 +181,7 @@ YUI.add('combiner', function (Y) {
                 hiddenBitString += this.getLastBit(sourcePixels[i+2]);
             }
 
-            return this._binaryToString(hiddenBitString);
+            return this._binaryToString(hiddenBitString).substr(15);// TODO: do filling in a more proper way
         },
 
         // extracts an image hidden in the LSBs of an image

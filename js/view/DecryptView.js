@@ -14,16 +14,26 @@ YUI.add('decrypt-view', function (Y) {
                 originalImg = new Image(),
                 combiner = new Y.Combiner(),
                 extractedImageData,
-                inst = this;
+                inst = this,
+                generalInfo;
 
             // show encrypted image and extract the hidden image
             originalImg.onload = function () {
                 originalContext.drawImage(originalImg, 0, 0, 300, 300);
 
-                extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
-                extractedContext.putImageData(extractedImageData, 0, 0);
+                generalInfo = combiner.extractGeneralInformation(originalContext.getImageData(0, 0, 300, 300));
 
-                inst._canvasHelper.replaceCanvasByImage(extractedCanvas);
+                if (generalInfo.type === combiner.CONTENT_TYPE_TEXT) {
+                    var hiddenText = combiner.extractText(originalContext.getImageData(0, 0, 300, 300), parseInt(generalInfo.contentLength, 2));
+                    Y.log(hiddenText);// TODO: show this somewhere in the DOM
+                } else if (generalInfo.type === combiner.IMAGE) {
+                    extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
+                    extractedContext.putImageData(extractedImageData, 0, 0);
+                    inst._canvasHelper.replaceCanvasByImage(extractedCanvas);
+                } else {
+                    Y.log("unknown content type");
+                }
+
             }
 
             originalImg.src = e.src;
