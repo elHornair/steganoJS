@@ -15,7 +15,14 @@ YUI.add('home-view', function (Y) {
             return this._readyImagesCounter >= 2 ? true : false;
         },
 
-        _handleImagesReady: function () {
+        _handleImageReady: function () {
+            this._readyImagesCounter += 1;
+            if (this._areImagesReady()) {
+                this._handleAllImagesReady();
+            }
+        },
+
+        _handleAllImagesReady: function () {
             var minifiedImageData,
                 combinedImageData,
                 extractedImageData,
@@ -57,21 +64,15 @@ YUI.add('home-view', function (Y) {
             this._containerImg = new Image();
             this._originalImg = new Image();
 
-            // draw original image
-            this._containerImg.onload = function() {// TODO: addeventlistener? oder sogar was von yui? dann sharen
-                inst._readyImagesCounter += 1;
-                if (inst._areImagesReady()) {
-                    inst._handleImagesReady();
-                }
-            };
+            // add listeners
+            this._containerImg.addEventListener('load', function () {
+                inst._handleImageReady();
+            });
+            this._originalImg.addEventListener('load', function () {
+                inst._handleImageReady();
+            });
 
-            this._originalImg.onload = function() {
-                inst._readyImagesCounter += 1;
-                if (inst._areImagesReady()) {
-                    inst._handleImagesReady();
-                }
-            };
-
+            // load images
             this._containerImg.src = "img/lena.png";
             this._originalImg.src = "img/fribourg.png";
 
