@@ -78,7 +78,7 @@ YUI.add('combiner', function (Y) {
             n = 4 * infoBitString.length;
 
             for (i = 0; i < n; i += 4) {
-                containerPixels[i+3] = ((containerPixels[i+3] >> 1) << 1) | parseInt(infoBitString.charAt(i/4));
+                containerPixels[i+3] = ((containerPixels[i+3] >> 1) << 1) | parseInt(infoBitString.charAt(i/4));// TODO: this seems to mess up the hidden text
             }
 
             return containerData;
@@ -87,7 +87,7 @@ YUI.add('combiner', function (Y) {
         // extracts general information about the hidden data
         extractGeneralInformation: function (containerData) {
             var containerPixels = containerData.data,
-                n = (1 + 1 + 3) * 8,// in version 1, this is the length of the general information
+                n = (1 + 1 + 3) * 8,// in version 1, this is the length of the general information in bits
                 i,
                 infoBitString = '',
                 containerData = {};
@@ -156,13 +156,12 @@ YUI.add('combiner', function (Y) {
 
             for (i = 0; i < n; i += 4) {
                 sourceIndex = (i/4) * 3;
-
                 containerPixels[i  ] = ((containerPixels[i  ] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex  ));
                 containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+1));
                 containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
             }
 
-            this._addGeneralInformation(containerData, this.CONTENT_TYPE_TEXT, bitStringToHide.length);
+            this._addGeneralInformation(containerData, this.CONTENT_TYPE_TEXT, bitStringToHide.length);// TODO: adding the general information somehow breaks the hidden text
 
             return containerData;
         },
