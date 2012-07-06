@@ -4,55 +4,76 @@ YUI.add('home-view', function (Y) {
 
     Y.HomeView = Y.Base.create('homeView', Y.View, [], {
 
-        initUI: function () {
-            var encryptedCanvas = this.get('container').one('#encrypted canvas'),
-                containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
-                originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
+        _readyImagesCounter: 0,
+        _containerContext: null,
+        _originalContext: null,
+        _containerImg: null,
+        _originalImg: null,
+        _combiner: new Y.Combiner(),
+
+        _areImagesReady: function () {
+            return this._readyImagesCounter >= 2 ? true : false;
+        },
+
+        _handleImagesReady: function () {
+            var minifiedImageData,
+                combinedImageData,
+                extractedImageData,
                 hiddenContext = this.get('container').one('#hidden canvas').invoke('getContext', '2d'),
+                encryptedCanvas = this.get('container').one('#encrypted canvas'),
                 encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
-                decryptedContext = this.get('container').one('#decrypted canvas').invoke('getContext', '2d'),
-                containerImg = new Image(),
-                originalImg = new Image(),
-                combiner = new Y.Combiner();
+                decryptedContext = this.get('container').one('#decrypted canvas').invoke('getContext', '2d');
+
+            // draw original images
+            this._containerContext.drawImage(this._containerImg, 0, 0, 300, 300);
+            this._originalContext.drawImage(this._originalImg, 0, 0, 300, 300);
+
+            // draw minified content image
+            minifiedImageData = this._combiner.minify(this._originalContext.getImageData(0, 0, 300, 300), 255);// TODO: could we directly pass it the image?
+            hiddenContext.putImageData(minifiedImageData, 0, 0);
+
+            // hide content image in container image
+            //combinedImageData = this._combiner.combine(this._containerContext.getImageData(0, 0, 300, 300), this._originalContext.getImageData(0, 0, 300, 300));
+            //encryptedContext.putImageData(combinedImageData, 0, 0);
+
+            // hide text in container image
+            combinedImageData = this._combiner.hideText(this._containerContext.getImageData(0, 0, 300, 300), 'das ist das haus vom nikolaus');
+            encryptedContext.putImageData(combinedImageData, 0, 0);
+
+            // extract hidden image again
+            extractedImageData = this._combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
+            decryptedContext.putImageData(extractedImageData, 0, 0);
+
+            // make combined image downloadable
+            Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>');
+        },
+
+        initUI: function () {
+            var inst = this;
+
+            // init contexts
+            this._containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d');
+            this._originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d');
+            this._containerImg = new Image();
+            this._originalImg = new Image();
 
             // draw original image
-            containerImg.onload = function() {
-                containerContext.drawImage(containerImg, 0, 0, 300, 300);
+            this._containerImg.onload = function() {// TODO: addeventlistener? oder sogar was von yui? dann sharen
+                inst._readyImagesCounter += 1;
+                if (inst._areImagesReady()) {
+                    inst._handleImagesReady();
+                }
             };
 
-            originalImg.onload = function() {
-                originalContext.drawImage(originalImg, 0, 0, 300, 300);
+            this._originalImg.onload = function() {
+                inst._readyImagesCounter += 1;
+                if (inst._areImagesReady()) {
+                    inst._handleImagesReady();
+                }
             };
 
-            containerImg.src = "img/lena.png";
-            originalImg.src = "img/fribourg.png";
-
-            // minify original image
-            setTimeout(function () {
-                var minifiedImageData = combiner.minify(originalContext.getImageData(0, 0, 300, 300), 255);// TODO: could we directly pass it the image?
-                hiddenContext.putImageData(minifiedImageData, 0, 0);
-            }, 200);// TODO: improve, so that we somehow get an event
-
-            // hide original image in container image
-            setTimeout(function () {
-                //var combinedImageData = combiner.combine(containerContext.getImageData(0, 0, 300, 300), originalContext.getImageData(0, 0, 300, 300));
-                //encryptedContext.putImageData(combinedImageData, 0, 0);
-
-                var combinedImageData = combiner.hideText(containerContext.getImageData(0, 0, 300, 300), 'das ist das haus vom nikolaus');
-                encryptedContext.putImageData(combinedImageData, 0, 0);
-            }, 200);// TODO: improve, so that we somehow get an event
-
-            // extract hidden image from container image
-            setTimeout(function () {
-                var extractedImageData = combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
-                decryptedContext.putImageData(extractedImageData, 0, 0);
-            }, 500);// TODO: improve, so that we somehow get an event
-
-            // write encrypted image to the DOM as an actual PNG
-            setTimeout(function () {
-                var imgData = encryptedCanvas.invoke('toDataURL', 'image/png');
-                Y.one('#result').append('<img src="' + imgData + '" class="thumbnail"/>');
-            }, 800);// TODO: improve, so that we somehow get an event*/
+            this._containerImg.src = "img/lena.png";
+            this._originalImg.src = "img/fribourg.png";
 
         },
 
