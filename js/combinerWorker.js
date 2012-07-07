@@ -17,7 +17,7 @@ self.addEventListener('message', function(e) {
         },
 
         _hideText = function (data) {
-            var textToHide = "---------------" + data.textToHide,// TODO: do filling in a more proper way
+            var textToHide = data.textToHide,
                 containerData = data.containerData,
                 containerPixels = containerData.data,
                 bitStringToHide = _stringToBinary(textToHide),

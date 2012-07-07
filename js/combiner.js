@@ -19,6 +19,7 @@ YUI.add('combiner', function (Y) {
         CONTENT_TYPE_NONE:   '00000000',
         CONTENT_TYPE_TEXT:   '00000001',
         CONTENT_TYPE_IMAGE:  '00000010',
+        TEXT_FILLER:  '---------------',
 
         // maps an 8-bit value to a 1-bit value
         mapToOneBit: function (oriVal) {
@@ -130,15 +131,16 @@ YUI.add('combiner', function (Y) {
 
         // hides text in an image
         hideText: function (containerData, textToHide, callback) {
-            var worker1 = new Worker('js/combinerWorker.js'),
+            var worker1 = new Worker('js/combinerWorker.js'),// TODO: put workers in array so their amount can be variable
                 worker2 = new Worker('js/combinerWorker.js'),
                 workersFinished = 0,
                 usedBitsCounter = 0,
                 worker1Data = null,
                 worker2Data = null,
+                textToHide = this.TEXT_FILLER + textToHide,
+                lenFirstPart = Math.ceil(textToHide.length / 48) * 24,// TODO: if text is too small, we just do it with one worker
+                offsetSecondPart = ((lenFirstPart * 8) / 3) * 4,
                 inst = this,
-                text1 = "text von worker eins.",
-                text2 = "text von worker zwei.",
 
                 handleWorkerFinished = function (e) {
                     workersFinished += 1;
@@ -147,7 +149,7 @@ YUI.add('combiner', function (Y) {
                     if (workersFinished >= 2) {
 
                         // concatenate data from the different workers
-                        worker1Data.data.set(worker2Data.data.subarray(384), 384);// TODO: save this when calculated
+                        worker1Data.data.set(worker2Data.data.subarray(offsetSecondPart), offsetSecondPart);
 
                         // add general information
                         inst._addGeneralInformation(worker1Data, inst.CONTENT_TYPE_TEXT, usedBitsCounter);
@@ -169,14 +171,14 @@ YUI.add('combiner', function (Y) {
 
             worker1.postMessage({
                 containerData: containerData,
-                textToHide: text1,
+                textToHide: textToHide.substr(0, lenFirstPart),
                 offset: 0
             });
 
             worker2.postMessage({
                 containerData: containerData,
-                textToHide: text2,
-                offset: (((("---------------" + text1).length) * 8) / 3) * 4// TODO: immer darauf achten, dass 1. text-chunk durch 3 teilbar ist
+                textToHide: textToHide.substr(lenFirstPart),
+                offset: offsetSecondPart
             });
 
         },

@@ -30,7 +30,7 @@ YUI.add('home-view', function (Y) {
                 encryptedCanvas = this.get('container').one('#encrypted canvas'),
                 encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
                 decryptedContext = this.get('container').one('#decrypted canvas').invoke('getContext', '2d'),
-                textToHide = 'das ist das haus vom nikolaus',
+                textToHide = 'das ist das haus vom nikolaus und der text ist noch etwas länger, weil er ja zwei webworker beschäftigen muss und sauber teilbar sein muss. das kann dann auch dazu führen, dass die beiden teile nicht genau gleich lang sind. das macht aber nichts, weil bei langen texten ist der unterschied verhältnismässig sehr klein.',
                 inst = this;
 
             // draw original images
