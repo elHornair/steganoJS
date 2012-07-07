@@ -138,7 +138,7 @@ YUI.add('combiner', function (Y) {
                 worker1Data = null,
                 worker2Data = null,
                 textToHide = this.TEXT_FILLER + textToHide,
-                lenFirstPart = Math.ceil(textToHide.length / 48) * 24,// TODO: if text is too small, we just do it with one worker
+                lenFirstPart = Math.floor(textToHide.length / 48) * 24,
                 offsetSecondPart = ((lenFirstPart * 8) / 3) * 4,
                 inst = this,
 
