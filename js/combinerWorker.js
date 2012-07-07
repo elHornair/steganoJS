@@ -27,9 +27,9 @@ self.addEventListener('message', function(e) {
 
             for (i = 0; i < n; i += 4) {
                 sourceIndex = (i/4) * 3;
-                containerPixels[i  ] = ((containerPixels[i  ] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex  ));
-                containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+1));
-                containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
+                containerPixels[data.offset + i    ] = ((containerPixels[data.offset + i    ] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex  ));
+                containerPixels[data.offset + i + 1] = ((containerPixels[data.offset + i + 1] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+1));
+                containerPixels[data.offset + i + 2] = ((containerPixels[data.offset + i + 2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
             }
 
             return {

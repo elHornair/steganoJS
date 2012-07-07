@@ -20,6 +20,11 @@ YUI.add('combiner', function (Y) {
         CONTENT_TYPE_TEXT:   '00000001',
         CONTENT_TYPE_IMAGE:  '00000010',
 
+        _workersFinished: 0,
+        _usedBitsCounter: 0,
+        _worker1Data: null,
+        _worker2Data: null,
+
         // maps an 8-bit value to a 1-bit value
         mapToOneBit: function (oriVal) {
             return (oriVal >= 128) ? 1 : 0;
@@ -128,19 +133,53 @@ YUI.add('combiner', function (Y) {
             return containerData;
         },
 
+        _handleWorkerFinished: function (e) {// TODO: refactor this to be self-contained in the hidetext function
+            this._workersFinished += 1;
+            this._usedBitsCounter += e.data.usedBits;
+
+            if (this._workersFinished >= 2) {
+
+                // concatenate data from the different workers
+                this._worker1Data.data.set(this._worker2Data.data.subarray(384), 384);// TODO: save this when calculated
+
+                // add general information
+                this._addGeneralInformation(this._worker1Data, this.CONTENT_TYPE_TEXT, this._usedBitsCounter);
+
+                // return image data with hidden text
+                e.callback(this._worker1Data);// TODO: throw an event instead
+            }
+        },
+
         // hides text in an image
         hideText: function (containerData, textToHide, callback) {
-            var worker = new Worker('js/combinerWorker.js'),
-                inst = this;
+            var worker1 = new Worker('js/combinerWorker.js'),
+                worker2 = new Worker('js/combinerWorker.js'),
+                inst = this,
+                text1 = "text von worker eins.",
+                text2 = "text von worker zwei.";
 
-            worker.addEventListener('message', function(e) {
-                inst._addGeneralInformation(e.data.containerData, inst.CONTENT_TYPE_TEXT, e.data.usedBits);
-                callback(e.data.containerData);// TODO: throw an event instead
+            worker1.addEventListener('message', function(e) {
+                e.callback = callback;
+                inst._worker1Data = e.data.containerData,
+                inst._handleWorkerFinished(e);
             }, false);
 
-            worker.postMessage({
+            worker2.addEventListener('message', function(e) {
+                e.callback = callback;
+                inst._worker2Data = e.data.containerData,
+                inst._handleWorkerFinished(e);
+            }, false);
+
+            worker1.postMessage({
                 containerData: containerData,
-                textToHide: textToHide,
+                textToHide: text1,
+                offset: 0
+            });
+
+            worker2.postMessage({
+                containerData: containerData,
+                textToHide: text2,
+                offset: (((("---------------" + text1).length) * 8) / 3) * 4// TODO: immer darauf achten, dass 1. text-chunk durch 3 teilbar ist
             });
 
         },
