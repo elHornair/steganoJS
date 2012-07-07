@@ -131,55 +131,63 @@ YUI.add('combiner', function (Y) {
 
         // hides text in an image
         hideText: function (containerData, textToHide, callback) {
-            var worker1 = new Worker('js/combinerWorker.js'),// TODO: put workers in array so their amount can be variable
-                worker2 = new Worker('js/combinerWorker.js'),
+            var usedBitsCounter = 0,
                 workersFinished = 0,
-                usedBitsCounter = 0,
-                worker1Data = null,
-                worker2Data = null,
-                textToHide = this.TEXT_FILLER + textToHide,
-                lenFirstPart = Math.floor(textToHide.length / 48) * 24,
-                offsetSecondPart = ((lenFirstPart * 8) / 3) * 4,
+                numWorkers = 4,
+                textToHide = this.TEXT_FILLER + textToHide,// TODO: review all those properties. could something be simplified?
+                partLength = Math.floor(textToHide.length / (numWorkers * 24)) * 24,
+                offsetPerPart = ((partLength * 8) / 3) * 4,
+                workerContainers = [],
+                myWorker,
+                i,
                 inst = this,
 
                 handleWorkerFinished = function (e) {
+                    var combinedData;
+
                     workersFinished += 1;
                     usedBitsCounter += e.data.usedBits;
 
-                    if (workersFinished >= 2) {
+                    if (workersFinished >= numWorkers) {
+                        combinedData = workerContainers[0].calculatedData;
 
                         // concatenate data from the different workers
-                        worker1Data.data.set(worker2Data.data.subarray(offsetSecondPart), offsetSecondPart);
+                        for (i = 1; i < numWorkers; i++) {
+                            combinedData.data.set(workerContainers[i].calculatedData.data.subarray(offsetPerPart*i), offsetPerPart*i);
+                        }
 
                         // add general information
-                        inst._addGeneralInformation(worker1Data, inst.CONTENT_TYPE_TEXT, usedBitsCounter);
+                        inst._addGeneralInformation(combinedData, inst.CONTENT_TYPE_TEXT, usedBitsCounter);
 
                         // return image data with hidden text
-                        callback(worker1Data);// TODO: throw an event instead
+                        callback(combinedData);// TODO: throw an event instead
                     }
                 };
 
-            worker1.addEventListener('message', function(e) {
-                worker1Data = e.data.containerData,
-                handleWorkerFinished(e);
-            }, false);
+            for (i = 0; i < numWorkers; i++) {
+                myWorker = new Worker('js/combinerWorker.js');
+                myWorker.index = i;
 
-            worker2.addEventListener('message', function(e) {
-                worker2Data = e.data.containerData,
-                handleWorkerFinished(e);
-            }, false);
+                myWorker.addEventListener('message', function(e) {
+                    workerContainers[e.srcElement.index].calculatedData = e.data.containerData;
+                    e.srcElement.terminate();
+                    handleWorkerFinished(e);
+                }, false);
 
-            worker1.postMessage({
-                containerData: containerData,
-                textToHide: textToHide.substr(0, lenFirstPart),
-                offset: 0
-            });
+                myWorker.postMessage({
+                    containerData: containerData,
+                    textToHide: (i + 1 === numWorkers ?
+                                 textToHide.substr(i*partLength) :// the last worker gets all the remaining text
+                                 textToHide.substr(i*partLength, partLength)),
+                    offset: i * offsetPerPart
+                });
 
-            worker2.postMessage({
-                containerData: containerData,
-                textToHide: textToHide.substr(lenFirstPart),
-                offset: offsetSecondPart
-            });
+                workerContainers.push({
+                    worker: myWorker,
+                    data: null
+                });
+
+            }
 
         },
 
