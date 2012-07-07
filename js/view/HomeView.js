@@ -29,7 +29,9 @@ YUI.add('home-view', function (Y) {
                 hiddenContext = this.get('container').one('#hidden canvas').invoke('getContext', '2d'),
                 encryptedCanvas = this.get('container').one('#encrypted canvas'),
                 encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
-                decryptedContext = this.get('container').one('#decrypted canvas').invoke('getContext', '2d');
+                decryptedContext = this.get('container').one('#decrypted canvas').invoke('getContext', '2d'),
+                textToHide = 'das ist das haus vom nikolaus',
+                inst = this;
 
             // draw original images
             this._containerContext.drawImage(this._containerImg, 0, 0, 300, 300);
@@ -44,15 +46,17 @@ YUI.add('home-view', function (Y) {
             //encryptedContext.putImageData(combinedImageData, 0, 0);
 
             // hide text in container image
-            combinedImageData = this._combiner.hideText(this._containerContext.getImageData(0, 0, 300, 300), 'das ist das haus vom nikolaus');
-            encryptedContext.putImageData(combinedImageData, 0, 0);
+            combinedImageData = this._combiner.hideText(this._containerContext.getImageData(0, 0, 300, 300), textToHide, function (combinedData){
+                encryptedContext.putImageData(combinedData, 0, 0);
 
-            // extract hidden image again
-            extractedImageData = this._combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
-            decryptedContext.putImageData(extractedImageData, 0, 0);
+                // extract hidden image again
+                extractedImageData = inst._combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
+                decryptedContext.putImageData(extractedImageData, 0, 0);
 
-            // make combined image downloadable
-            Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>');
+                // make combined image downloadable
+                Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>');
+            });
+
         },
 
         initUI: function () {

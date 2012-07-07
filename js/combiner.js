@@ -31,21 +31,6 @@ YUI.add('combiner', function (Y) {
             return parseInt(bitString.charAt(bitString.length-1), 2);
         },
 
-        _stringToBinary: function (sourceString) {
-            var i = 0,
-                n = sourceString.length,
-                currentCharBits,
-                fillString = '00000000',
-                resultBitString = '';
-
-            for (i = 0; i < n; i+=1) {
-                currentCharBits = fillString + sourceString.charCodeAt(i).toString(2);// if the char code doesn't take a full byte, we fill it with zeros
-                resultBitString += currentCharBits.substr(-8);
-            }
-
-            return resultBitString;
-        },
-
         _binaryToString: function (sourceBitString) {
             var i = 0,
                 n = parseInt(sourceBitString.length / 8, 10),
@@ -144,26 +129,20 @@ YUI.add('combiner', function (Y) {
         },
 
         // hides text in an image
-        hideText: function (containerData, textToHide) {
+        hideText: function (containerData, textToHide, callback) {
+            var worker = new Worker('js/combinerWorker.js'),
+                inst = this;
 
-            textToHide = "---------------" + textToHide;// TODO: do filling in a more proper way
+            worker.addEventListener('message', function(e) {
+                inst._addGeneralInformation(e.data.containerData, inst.CONTENT_TYPE_TEXT, e.data.usedBits);
+                callback(e.data.containerData);// TODO: throw an event instead
+            }, false);
 
-            var containerPixels = containerData.data,
-                bitStringToHide = this._stringToBinary(textToHide),
-                n = Math.ceil((bitStringToHide.length/3) * 4),
-                i,
-                sourceIndex;
+            worker.postMessage({
+                containerData: containerData,
+                textToHide: textToHide,
+            });
 
-            for (i = 0; i < n; i += 4) {
-                sourceIndex = (i/4) * 3;
-                containerPixels[i  ] = ((containerPixels[i  ] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex  ));
-                containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+1));
-                containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | parseInt(bitStringToHide.charAt(sourceIndex+2));
-            }
-
-            this._addGeneralInformation(containerData, this.CONTENT_TYPE_TEXT, bitStringToHide.length);// TODO: adding the general information somehow breaks the hidden text
-
-            return containerData;
         },
 
         // extracts text from image
