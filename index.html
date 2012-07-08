@@ -24,7 +24,8 @@
                 <a class="brand" href="/">SteganoJS</a>
                 <div class="nav-collapse">
                     <ul class="nav">
-                        <li><a href="/">Home</a></li>
+                        <li><a href="/">Performance</a></li>
+                        <li><a href="/home">Home</a></li>
                         <li><a href="/upload">Upload Image</a></li>
                         <li><a href="/decrypt">Decrypt</a></li>
                     </ul>
@@ -64,6 +65,17 @@
         </div>
         <div id="result" class="canvas_container">
             <h2>Result image</h2>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="template_performance">
+        <div id="container" class="canvas_container">
+            <h2>Container</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+        <div id="encrypted" class="canvas_container">
+            <h2>Encrypted</h2>
+            <canvas width="300" height="300" class="thumbnail"></canvas>
         </div>
     </script>
 
