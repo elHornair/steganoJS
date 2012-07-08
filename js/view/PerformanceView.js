@@ -8,10 +8,10 @@ YUI.add('performance-view', function (Y) {
         _containerImg: null,
         _combiner: new Y.Combiner(),
         _canvasHelper: new Y.CanvasHelper(),
+        _imageSize: 1024,
 
         _handleImageReady: function () {
-            var combinedImageData,
-                encryptedCanvas = this.get('container').one('#encrypted canvas'),
+            var encryptedCanvas = this.get('container').one('#encrypted canvas'),
                 encryptedContext = encryptedCanvas.invoke('getContext', '2d'),
                 inst = this,
                 startTime,
@@ -19,11 +19,11 @@ YUI.add('performance-view', function (Y) {
                 textToHide = 'bald fertig. juppiii';
 
             // draw container image
-            this._containerContext.drawImage(this._containerImg, 0, 0, 300, 300);
+            this._containerContext.drawImage(this._containerImg, 0, 0, this._imageSize, this._imageSize);
 
             // hide text in container image
             startTime = new Date().getTime();
-            combinedImageData = this._combiner.hideText(this._containerContext.getImageData(0, 0, 300, 300), textToHide, function (combinedData){
+            this._combiner.hideText(this._containerContext.getImageData(0, 0, this._imageSize, this._imageSize), textToHide, function (combinedData){
                 endTime = new Date().getTime();
 
                 Y.log ('time to hide text (milliseconds): ' + (endTime - startTime));
@@ -33,7 +33,6 @@ YUI.add('performance-view', function (Y) {
 
                 // make combined image downloadable
                 inst._canvasHelper.replaceCanvasByImage(encryptedCanvas);
-                //Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>');
             });
 
         },
@@ -51,7 +50,7 @@ YUI.add('performance-view', function (Y) {
             });
 
             // load image
-            this._containerImg.src = "img/lena.png";
+            this._containerImg.src = "img/lena_1024.png";
 
         },
 
