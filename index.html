@@ -24,9 +24,10 @@
                 <a class="brand" href="/">SteganoJS</a>
                 <div class="nav-collapse">
                     <ul class="nav">
-                        <li><a href="/">Performance</a></li>
-                        <li><a href="/home">Home</a></li>
-                        <li><a href="/upload">Upload Image</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/performance">Performance</a></li>
+                        <li><a href="/hidetext">Hide Text</a></li>
+                        <li><a href="/upload">Hide Image</a></li>
                         <li><a href="/decrypt">Decrypt</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
@@ -36,7 +37,7 @@
 
     <div class="container">
         <div class="page-header">
-            <h1>SteganoJS <small>A demo application</small></h1>
+            <h1>SteganoJS <small>Seeing the unseen</small></h1>
         </div>
         <div id="content"></div>
     </div> <!-- /container -->
@@ -89,6 +90,26 @@
             <div id="original" class="canvas_container">
                 <h2>Uploaded Image (minified)</h2>
                 <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+            <div id="encrypted" class="canvas_container">
+                <h2>Result Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="template_hidetext">
+        <textarea rows="20" id="text_input" type="textarea" class="thumbnail">Type your text here!</textarea>
+        <button id="bt_done" type="submit" class="btn btn-primary">Hide!</button>
+
+        <div id="resultbox" class="hidden">
+            <div id="container" class="canvas_container">
+                <h2>Container Image</h2>
+                <canvas width="300" height="300" class="thumbnail"></canvas>
+            </div>
+            <div id="hidden_text" class="canvas_container">
+                <h2>Hidden Text</h2>
+                <div class="thumbnail result">whatever man</div>
             </div>
             <div id="encrypted" class="canvas_container">
                 <h2>Result Image</h2>

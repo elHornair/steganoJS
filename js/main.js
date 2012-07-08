@@ -15,6 +15,9 @@ YUI({
         'upload-view': {
             fullpath: "js/view/UploadView.js"
         },
+        'hidetext-view': {
+            fullpath: "js/view/HideTextView.js"
+        },
         'decrypt-view': {
             fullpath: "js/view/DecryptView.js"
         },
@@ -22,7 +25,7 @@ YUI({
             fullpath: "js/widgets/FileDropper.js"
         }
     }
-}).use('node', 'app-base', 'app-transitions', 'home-view', 'performance-view', 'upload-view', 'decrypt-view', 'file-dropper', function (Y) {
+}).use('node', 'app-base', 'app-transitions', 'home-view', 'performance-view', 'upload-view', 'hidetext-view', 'decrypt-view', 'file-dropper', function (Y) {
 
     'use strict';
 
@@ -40,6 +43,9 @@ YUI({
             },
             upload: {
                 type: 'UploadView'
+            },
+            hidetext: {
+                type: 'HideTextView'
             },
             decrypt: {
                 type: 'DecryptView'
@@ -59,6 +65,11 @@ YUI({
             path: '/upload',
             callback: function () {
                 this.showView('upload');
+            }
+        }, {
+            path: '/hidetext',
+            callback: function () {
+                this.showView('hidetext');
             }
         }, {
             path: '/decrypt',

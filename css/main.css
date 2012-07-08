@@ -21,3 +21,13 @@ div.canvas_container {
     line-height: 300px;
     font-size: 3em;
 }
+
+#text_input {
+    width: 600px;
+}
+
+#hidden_text .result {
+    width: 300px;
+    min-height: 300px;
+    line-height: 1.6em;
+}
