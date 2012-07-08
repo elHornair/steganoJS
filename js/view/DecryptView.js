@@ -26,7 +26,7 @@ YUI.add('decrypt-view', function (Y) {
                 if (generalInfo.type === combiner.CONTENT_TYPE_TEXT) {
                     var hiddenText = combiner.extractText(originalContext.getImageData(0, 0, 300, 300), parseInt(generalInfo.contentLength, 2));
                     Y.log(hiddenText);// TODO: show this somewhere in the DOM
-                } else if (generalInfo.type === combiner.IMAGE) {
+                } else if (generalInfo.type === combiner.CONTENT_TYPE_IMAGE) {
                     extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
                     extractedContext.putImageData(extractedImageData, 0, 0);
                     inst._canvasHelper.replaceCanvasByImage(extractedCanvas);

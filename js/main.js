@@ -48,12 +48,12 @@ YUI({
         routes: [{
             path: '/',
             callback: function () {
-                this.showView('performance');
+                this.showView('home');
             }
         }, {
-            path: '/home',
+            path: '/performance',
             callback: function () {
-                this.showView('home');
+                this.showView('performance');
             }
         }, {
             path: '/upload',

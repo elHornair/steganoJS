@@ -44,12 +44,18 @@ YUI.add('home-view', function (Y) {
             hiddenContext.putImageData(minifiedImageData, 0, 0);
 
             // hide content image in container image
-            //combinedImageData = this._combiner.combine(this._containerContext.getImageData(0, 0, 300, 300), this._originalContext.getImageData(0, 0, 300, 300));
-            //encryptedContext.putImageData(combinedImageData, 0, 0);
+            combinedImageData = this._combiner.combine(this._containerContext.getImageData(0, 0, 300, 300), this._originalContext.getImageData(0, 0, 300, 300));
+            encryptedContext.putImageData(combinedImageData, 0, 0);
+
+            // extract hidden image again
+            extractedImageData = inst._combiner.extract(encryptedContext.getImageData(0, 0, 300, 300));
+            decryptedContext.putImageData(extractedImageData, 0, 0);
+
+            // make combined image downloadable
+            Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>')
 
             // hide text in container image
-
-            startTime = new Date().getTime();
+            /*startTime = new Date().getTime();
             combinedImageData = this._combiner.hideText(this._containerContext.getImageData(0, 0, 300, 300), textToHide, function (combinedData){
                 endTime = new Date().getTime();
 
@@ -63,7 +69,7 @@ YUI.add('home-view', function (Y) {
 
                 // make combined image downloadable
                 Y.one('#result').append('<img src="' + encryptedCanvas.invoke('toDataURL', 'image/png') + '" class="thumbnail"/>');
-            });
+            });*/
 
         },
 

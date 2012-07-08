@@ -49,6 +49,7 @@ YUI.add('combiner', function (Y) {
             var containerPixels = containerData.data,
                 n,
                 i,
+                contentLength = contentLength || 0,
                 infoBitString = '';
 
             // add version
@@ -125,6 +126,9 @@ YUI.add('combiner', function (Y) {
                 containerPixels[i+1] = ((containerPixels[i+1] >> 1) << 1) | minifiedPixels[i+1];
                 containerPixels[i+2] = ((containerPixels[i+2] >> 1) << 1) | minifiedPixels[i+2];
             }
+
+            // add general information
+            this._addGeneralInformation(containerData, this.CONTENT_TYPE_IMAGE);
 
             return containerData;
         },
