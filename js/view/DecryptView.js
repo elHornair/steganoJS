@@ -9,13 +9,15 @@ YUI.add('decrypt-view', function (Y) {
 
         _handleFileDropped: function (e) {
             var originalContext = this.get('container').one('#original canvas').invoke('getContext', '2d'),
-                extractedCanvas = this.get('container').one('#extracted canvas'),
-                extractedContext = extractedCanvas.invoke('getContext', '2d'),
+                extractedCanvas,
+                extractedContext,
                 originalImg = new Image(),
                 combiner = new Y.Combiner(),
                 extractedImageData,
                 inst = this,
-                generalInfo;
+                generalInfo,
+                hiddenText,
+                extractedNode;
 
             // show encrypted image and extract the hidden image
             originalImg.onload = function () {
@@ -24,22 +26,33 @@ YUI.add('decrypt-view', function (Y) {
                 generalInfo = combiner.extractGeneralInformation(originalContext.getImageData(0, 0, 300, 300));
 
                 if (generalInfo.type === combiner.CONTENT_TYPE_TEXT) {
-                    var hiddenText = combiner.extractText(originalContext.getImageData(0, 0, 300, 300), parseInt(generalInfo.contentLength, 2));
-                    Y.log(hiddenText);// TODO: show this somewhere in the DOM
+                    hiddenText = combiner.extractText(originalContext.getImageData(0, 0, 300, 300), parseInt(generalInfo.contentLength, 2));
+                    extractedNode = Y.one('#extracted_text');
+
+                    // add extracted text to DOM
+                    extractedNode.one('.result').set('text', hiddenText);
                 } else if (generalInfo.type === combiner.CONTENT_TYPE_IMAGE) {
+                    extractedNode = Y.one('#extracted_image');
+                    extractedCanvas = extractedNode.one('canvas');
+                    extractedContext = extractedCanvas.invoke('getContext', '2d');
+
+                    // add extracted image to DOM
                     extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
                     extractedContext.putImageData(extractedImageData, 0, 0);
                     inst._canvasHelper.replaceCanvasByImage(extractedCanvas);
                 } else {
-                    Y.log("unknown content type");
+                    // add error info to DOM
+                    extractedNode = Y.one('#extracted_text');
+                    extractedNode.one('.result').set('text', 'Error: unknown content type');
                 }
+
+                extractedNode.removeClass('hidden');
 
             }
 
             originalImg.src = e.src;
 
             // remove filedropper and show result
-            Y.detach('filedropper:drop', this._handleFileDropped, this);
             this._fileDropper.destroy();
             this.get('container').one('#resultbox').removeClass('hidden');
         },
@@ -51,7 +64,7 @@ YUI.add('decrypt-view', function (Y) {
                 srcNode: '#dropbox'
             });
 
-            Y.on('filedropper:drop', this._handleFileDropped, this);
+            Y.once('filedropper:drop', this._handleFileDropped, this);
 
             this._fileDropper.render();
         },

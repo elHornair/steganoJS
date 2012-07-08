@@ -40,7 +40,6 @@ YUI.add('upload-view', function (Y) {
             originalImg.src = e.src;
 
             // remove filedropper and show result
-            Y.detach('filedropper:drop', this._handleFileDropped, this);
             this._fileDropper.destroy();
             this.get('container').one('#resultbox').removeClass('hidden');
         },
@@ -54,7 +53,7 @@ YUI.add('upload-view', function (Y) {
                 srcNode: '#dropbox'
             });
 
-            Y.on('filedropper:drop', this._handleFileDropped, this);
+            Y.once('filedropper:drop', this._handleFileDropped, this);
 
             this._fileDropper.render();
 
