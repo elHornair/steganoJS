@@ -33,6 +33,7 @@ self.addEventListener('message', function(e) {
             }
 
             return {
+                index: data.index,
                 containerData: containerData,
                 usedBits: bitStringToHide.length
             }

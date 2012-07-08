@@ -169,12 +169,13 @@ YUI.add('combiner', function (Y) {
                 myWorker.index = i;
 
                 myWorker.addEventListener('message', function(e) {
-                    workerContainers[e.srcElement.index].calculatedData = e.data.containerData;
-                    e.srcElement.terminate();
+                    workerContainers[e.data.index].calculatedData = e.data.containerData;
+                    workerContainers[e.data.index].worker.terminate();
                     handleWorkerFinished(e);
                 }, false);
 
                 myWorker.postMessage({
+                    index: i,
                     containerData: containerData,
                     textToHide: (i + 1 === numWorkers ?
                                  textToHide.substr(i*partLength) :// the last worker gets all the remaining text
