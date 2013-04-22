@@ -9,9 +9,6 @@ YUI({
         'home-view': {
             fullpath: "js/view/HomeView.js"
         },
-        'performance-view': {
-            fullpath: "js/view/PerformanceView.js"
-        },
         'upload-view': {
             fullpath: "js/view/UploadView.js"
         },
@@ -25,7 +22,7 @@ YUI({
             fullpath: "js/widgets/FileDropper.js"
         }
     }
-}).use('node', 'app-base', 'app-transitions', 'home-view', 'performance-view', 'upload-view', 'hidetext-view', 'decrypt-view', 'file-dropper', function (Y) {
+}).use('node', 'app-base', 'app-transitions', 'home-view', 'upload-view', 'hidetext-view', 'decrypt-view', 'file-dropper', function (Y) {
 
     'use strict';
 
@@ -37,9 +34,6 @@ YUI({
         views: {
             home: {
                 type: 'HomeView'
-            },
-            performance: {
-                type: 'PerformanceView'
             },
             upload: {
                 type: 'UploadView'
@@ -55,11 +49,6 @@ YUI({
             path: '/',
             callback: function () {
                 this.showView('home');
-            }
-        }, {
-            path: '/performance',
-            callback: function () {
-                this.showView('performance');
             }
         }, {
             path: '/upload',
