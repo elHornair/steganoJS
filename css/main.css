@@ -25,9 +25,47 @@ div.canvas_container {
 #text_input {
     width: 600px;
 }
-
 .result {
     width: 300px;
     min-height: 300px;
     line-height: 1.6em;
+}
+
+p {
+    padding-top: 10px;
+}
+
+/* home */
+.thumbnail.small {
+    width: 206px;
+}
+
+.homepic {
+    float: left;
+    margin-right: 26px;
+}
+
+ul.about_me {
+    float: left;
+    margin-left: 0;
+    list-style: none;
+}
+
+ul.about_me li {
+    padding-left: 50px;
+    line-height: 34px;
+    background-repeat: no-repeat;
+}
+
+li.liip {
+    background-image: url('/img/liip.png');
+}
+li.twitter {
+    background-image: url('/img/twitter.png');
+}
+li.github {
+    background-image: url('/img/github.png');
+}
+li.zhaw {
+    background-image: url('/img/zhaw.png');
 }

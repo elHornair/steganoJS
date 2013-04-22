@@ -43,28 +43,35 @@
 
     <!-- Frontend templates -->
     <script type="text/x-template" id="template_home">
-        <div id="container" class="canvas_container">
-            <h2>Container</h2>
-            <canvas width="300" height="300" class="thumbnail"></canvas>
-        </div>
-        <div id="original" class="canvas_container">
-            <h2>Original</h2>
-            <canvas width="300" height="300" class="thumbnail"></canvas>
-        </div>
-        <div id="hidden" class="canvas_container">
-            <h2>Minified Content</h2>
-            <canvas width="300" height="300" class="thumbnail"></canvas>
-        </div>
-        <div id="encrypted" class="canvas_container">
-            <h2>Encrypted</h2>
-            <canvas width="300" height="300" class="thumbnail"></canvas>
-        </div>
-        <div id="decrypted" class="canvas_container">
-            <h2>Decrypted</h2>
-            <canvas width="300" height="300" class="thumbnail"></canvas>
-        </div>
-        <div id="result" class="canvas_container">
-            <h2>Result image</h2>
+        <div class="row">
+            <div class="span4">
+                <h3>About this project</h3>
+                <p>This app was built for a class on parallel computing at the <a href="http://www.zhaw.ch/">School of Applied Science</a>
+                    in Zurich, Switzerland.
+                    TODO: mention "MDC", say what it does, how it works, how to use, ...
+                </p>
+            </div>
+            <div class="span3">
+                <h3>About me</h3>
+                <img src="/img/me.jpg" alt="me image" class="thumbnail small">
+                <ul class="about_me">
+                    <li><strong>Alain Horner</strong></li>
+                    <li class="liip">Web developer at <a href="http://www.liip.ch">Liip</a></li>
+                    <li class="zhaw">Student at <a href="http://www.zhaw.ch">ZHAW</a></li>
+                    <li class="twitter">Bird on Twitter: <a href="https://twitter.com/#!/elHornair">@elHornair</a></li>
+                    <li class="github">Cat on Github: <a href="https://github.com/elHornair">elHornair</a></li>
+                </ul>
+            </div>
+            <div class="span4">
+                <h3>About the girl</h3>
+                <img src="img/lena_small.jpg" class="thumbnail small"/>
+                <p>The picture that is used for this app shows
+                    <a href="http://en.wikipedia.org/wiki/Lena_S%C3%B6derberg">Lena Söderberg</a>.
+                    It appeared in the Playboy magazine in 1972.
+                    The picture was used in 1973 for testing an image processing algorithm.
+                    Since then, the image became some sort of "standard" for testing in the world of digital
+                    image processing. Find the details <a href="http://en.wikipedia.org/wiki/Lenna">here</a>.</p>
+            </div>
         </div>
     </script>
 
