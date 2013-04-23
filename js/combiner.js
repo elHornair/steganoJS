@@ -137,7 +137,7 @@ YUI.add('combiner', function (Y) {
         hideText: function (containerData, textToHide, callback) {
             var usedBitsCounter = 0,
                 workersFinished = 0,
-                numWorkers = 1,
+                numWorkers = 4,
                 textToHide = this.TEXT_FILLER + textToHide,// TODO: review all those properties. could something be simplified?
                 partLength = Math.floor(textToHide.length / (numWorkers * 24)) * 24,
                 offsetPerPart = ((partLength * 8) / 3) * 4,
