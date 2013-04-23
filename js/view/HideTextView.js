@@ -9,7 +9,8 @@ YUI.add('hidetext-view', function (Y) {
         _imageSize: 300,
 
         _handleDoneBtClicked: function (e) {
-            var inputNode = Y.one('#text_input'),
+            var inputNodeContainer = Y.one('#text_input_container'),
+                inputNode = Y.one('#text_input_container textarea'),
                 textToHide = inputNode.get('value'),
                 containerContext = this.get('container').one('#container canvas').invoke('getContext', '2d'),
                 encryptedCanvas = this.get('container').one('#encrypted canvas'),
@@ -29,7 +30,7 @@ YUI.add('hidetext-view', function (Y) {
             });
 
             // hide input elements
-            inputNode.addClass('hidden');
+            inputNodeContainer.addClass('hidden');
             this.get('container').one('#bt_done').addClass('hidden');
 
             // show result

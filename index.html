@@ -51,17 +51,6 @@
                     TODO: mention "MDC", say what it does, how it works, how to use, ...
                 </p>
             </div>
-            <div class="span3">
-                <h3>About me</h3>
-                <img src="/img/me.jpg" alt="me image" class="thumbnail small">
-                <ul class="about_me">
-                    <li><strong>Alain Horner</strong></li>
-                    <li class="liip">Web developer at <a href="http://www.liip.ch">Liip</a></li>
-                    <li class="zhaw">Student at <a href="http://www.zhaw.ch">ZHAW</a></li>
-                    <li class="twitter">Bird on Twitter: <a href="https://twitter.com/#!/elHornair">@elHornair</a></li>
-                    <li class="github">Cat on Github: <a href="https://github.com/elHornair">elHornair</a></li>
-                </ul>
-            </div>
             <div class="span4">
                 <h3>About the girl</h3>
                 <img src="img/lena_small.jpg" class="thumbnail small"/>
@@ -71,6 +60,17 @@
                     The picture was used in 1973 for testing an image processing algorithm.
                     Since then, the image became some sort of "standard" for testing in the world of digital
                     image processing. Find the details <a href="http://en.wikipedia.org/wiki/Lenna">here</a>.</p>
+            </div>
+            <div class="span4">
+                <h3>About me</h3>
+                <img src="/img/me.jpg" alt="me image" class="thumbnail small">
+                <ul class="about_me">
+                    <li><strong>Alain Horner</strong></li>
+                    <li class="liip">Web developer at <a href="http://www.liip.ch">Liip</a></li>
+                    <li class="zhaw">Student at <a href="http://www.zhaw.ch">ZHAW</a></li>
+                    <li class="twitter">Bird on Twitter: <a href="https://twitter.com/#!/elHornair">@elHornair</a></li>
+                    <li class="github">Cat on Github: <a href="https://github.com/elHornair">elHornair</a></li>
+                </ul>
             </div>
         </div>
     </script>
@@ -94,21 +94,45 @@
     </script>
 
     <script type="text/x-template" id="template_hidetext">
-        <textarea rows="20" id="text_input" type="textarea" class="thumbnail">Type your text here!</textarea>
-        <button id="bt_done" type="submit" class="btn btn-primary">Hide!</button>
-
-        <div id="resultbox" class="hidden">
-            <div id="container" class="canvas_container">
-                <h2>Container Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+        <div id="text_input_container" class="row">
+            <div class="span4">
+                <p>
+                    <span class="label label-info">Info</span>
+                    Paste your secret text into the following textbox and press the hide button when you're ready.
+                    There is enough space for around <strong>32KB</strong> so feel free to be chatty ;)
+                </p>
             </div>
-            <div id="hidden_text" class="canvas_container">
-                <h2>Hidden Text</h2>
-                <div class="thumbnail result"></div>
+            <div class="span7">
+                <textarea rows="20" id="text_input" type="textarea" class="thumbnail">Paste your text here!</textarea>
             </div>
-            <div id="encrypted" class="canvas_container">
-                <h2>Result Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+            <div class="span1">
+                <button id="bt_done" type="submit" class="btn btn-primary">Hide!</button>
+            </div>
+        </div>
+        <div id="resultbox" class="row hidden">
+            <div class="span4"><p>
+                <span class="label label-info">Info</span>
+                Your text was hidden in the <a href="http://en.wikipedia.org/wiki/Lenna">famous image</a> on the
+                right. You can download it by right clicking and selecting "Save image as". You can now send the
+                image to a friend and he can discover your secret by dropping it to the
+                <a href="/decrypt">decryption page</a>.
+            </p>
+            </div>
+            <div class="span4">
+                <div id="container" class="canvas_container hidden">
+                    <h2>Container Image</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
+                <div id="hidden_text" class="canvas_container">
+                    <h2>Hidden Text</h2>
+                    <div class="thumbnail result"></div>
+                </div>
+            </div>
+            <div class="span4">
+                <div id="encrypted" class="canvas_container">
+                    <h2>Image with hidden text</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
             </div>
         </div>
     </script>

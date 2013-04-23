@@ -3,6 +3,17 @@ body {
     padding-top: 60px;
     padding-bottom: 40px;
     overflow-y: scroll;
+
+    font-size: 16px;
+    line-height: 26px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+textarea {
+    margin-top: 10px;
 }
 
 div.canvas_container {
@@ -12,6 +23,10 @@ div.canvas_container {
 
 .hidden {
     display: none;
+}
+
+span.label {
+    font-size: 1em;
 }
 
 #dropbox {
@@ -38,6 +53,7 @@ p {
 /* home */
 .thumbnail.small {
     width: 206px;
+    margin: 10px 0;
 }
 
 .homepic {
@@ -68,4 +84,9 @@ li.github {
 }
 li.zhaw {
     background-image: url('/img/zhaw.png');
+}
+
+/* Hide */
+#bt_done {
+    margin-top: 10px;
 }
