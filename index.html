@@ -162,19 +162,49 @@
     </script>
 
     <script type="text/x-template" id="template_decrypt">
-        <div id="dropbox" class="thumbnail">Drop your image here!</div>
-        <div id="resultbox" class="hidden">
-            <div id="original" class="canvas_container">
-                <h2>Original Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+
+        <div id="dropbox_container" class="row">
+            <div class="span4">
+                <p>
+                    <span class="label label-info">Info</span>
+                    Drop an image with a hidden secret (text or image) into the box on the right.
+                </p>
             </div>
-            <div id="extracted_text" class="canvas_container hidden">
-                <h2>Hidden Text</h2>
-                <div class="thumbnail result"></div>
+            <div class="span8">
+                <div id="dropbox" class="thumbnail">Drop your image here!</div>
             </div>
-            <div id="extracted_image" class="canvas_container hidden">
-                <h2>Hidden Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+
+        <div id="resultbox" class="hidden row">
+            <div class="span4">
+                <p id="info_error" class="hidden">
+                    <span class="label label-important">Error</span>
+                    We couldn't extract a secret in this image. Are you sure that there is one hidden?
+                </p>
+                <p id="info_image" class="hidden">
+                    <span class="label label-success">Image found</span>
+                    We successfully extracted the image on the right.
+                </p>
+                <p id="info_text" class="hidden">
+                    <span class="label label-success">Text found</span>
+                    We successfully extracted the text on the right.
+                </p>
+            </div>
+            <div class="span4">
+                <div id="original" class="canvas_container">
+                    <h2>Original Image</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
+            </div>
+            <div class="span4">
+                <div id="extracted_text" class="canvas_container hidden">
+                    <h2>Hidden Text</h2>
+                    <div class="thumbnail result"></div>
+                </div>
+                <div id="extracted_image" class="canvas_container hidden">
+                    <h2>Hidden Image</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
             </div>
         </div>
     </script>

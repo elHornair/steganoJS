@@ -17,6 +17,7 @@ YUI.add('decrypt-view', function (Y) {
                 inst = this,
                 generalInfo,
                 hiddenText,
+                extractedLabel,
                 extractedNode;
 
             // show encrypted image and extract the hidden image
@@ -28,6 +29,7 @@ YUI.add('decrypt-view', function (Y) {
                 if (generalInfo.type === combiner.CONTENT_TYPE_TEXT) {
                     hiddenText = combiner.extractText(originalContext.getImageData(0, 0, 300, 300), parseInt(generalInfo.contentLength, 2));
                     extractedNode = Y.one('#extracted_text');
+                    extractedLabel = Y.one('#info_text');
 
                     // add extracted text to DOM
                     extractedNode.one('.result').set('text', hiddenText);
@@ -35,6 +37,7 @@ YUI.add('decrypt-view', function (Y) {
                     extractedNode = Y.one('#extracted_image');
                     extractedCanvas = extractedNode.one('canvas');
                     extractedContext = extractedCanvas.invoke('getContext', '2d');
+                    extractedLabel = Y.one('#info_image');
 
                     // add extracted image to DOM
                     extractedImageData = combiner.extract(originalContext.getImageData(0, 0, 300, 300), 255);
@@ -44,10 +47,11 @@ YUI.add('decrypt-view', function (Y) {
                     // add error info to DOM
                     extractedNode = Y.one('#extracted_text');
                     extractedNode.one('.result').set('text', 'Error: unknown content type');
+                    extractedLabel = Y.one('#info_error');
                 }
 
                 extractedNode.removeClass('hidden');
-
+                extractedLabel.removeClass('hidden');
             }
 
             originalImg.src = e.src;
@@ -55,13 +59,14 @@ YUI.add('decrypt-view', function (Y) {
             // remove filedropper and show result
             this._fileDropper.destroy();
             this.get('container').one('#resultbox').removeClass('hidden');
+            Y.one('#dropbox_container').addClass('hidden');
         },
 
         initUI: function () {
 
             // init fileDropper
             this._fileDropper = new Y.FileDropper({
-                srcNode: '#dropbox'
+                srcNode: '#dropbox_container #dropbox'
             });
 
             Y.once('filedropper:drop', this._handleFileDropped, this);

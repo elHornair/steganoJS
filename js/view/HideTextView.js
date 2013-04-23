@@ -30,7 +30,7 @@ YUI.add('hidetext-view', function (Y) {
             });
 
             // hide input elements
-            Y.one('#dropbox_container').addClass('hidden');
+            Y.one('#text_input_container').addClass('hidden');
             this.get('container').one('#bt_done').addClass('hidden');
 
             // show result
