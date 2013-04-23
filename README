@@ -1,1 +1,3 @@
-This is a school project. Hiding an image in another image
+SteganoJS was built for a class on parallel computing at the School of Applied Science in Zurich, Switzerland.
+The app let's you hide a secret text or a secret image in a container image. It uses web workers to do so in an efficient way. The hidden information is saved in the least significant bit of the container image.
+The concept of hiding information in a container is fairly old (the ancient greeks already applied it) and is called Steganography- Hence the name SteganoJS.
