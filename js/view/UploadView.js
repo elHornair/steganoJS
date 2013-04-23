@@ -42,6 +42,9 @@ YUI.add('upload-view', function (Y) {
             // remove filedropper and show result
             this._fileDropper.destroy();
             this.get('container').one('#resultbox').removeClass('hidden');
+
+            // hide original content
+            Y.one('#dropbox_container').addClass('hidden');
         },
 
         initUI: function () {
@@ -50,7 +53,7 @@ YUI.add('upload-view', function (Y) {
 
             // init fileDropper
             this._fileDropper = new Y.FileDropper({
-                srcNode: '#dropbox'
+                srcNode: '#dropbox_container #dropbox'
             });
 
             Y.once('filedropper:drop', this._handleFileDropped, this);

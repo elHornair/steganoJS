@@ -76,19 +76,44 @@
     </script>
 
     <script type="text/x-template" id="template_upload">
-        <div id="dropbox" class="thumbnail">Drop your image here!</div>
-        <div id="resultbox" class="hidden">
-            <div id="container" class="canvas_container">
-                <h2>Container Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+        <div id="dropbox_container" class="row">
+            <div class="span4">
+                <p>
+                    <span class="label label-info">Info</span>
+                    Paste your secret text into the following textbox and press the hide button when you're ready.
+                    There is enough space for around <strong>32KB</strong> so feel free to be chatty ;)
+                </p>
             </div>
-            <div id="original" class="canvas_container">
-                <h2>Uploaded Image (minified)</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+            <div class="span8">
+                <div id="dropbox" class="thumbnail">Drop your image here!</div>
             </div>
-            <div id="encrypted" class="canvas_container">
-                <h2>Result Image</h2>
-                <canvas width="300" height="300" class="thumbnail"></canvas>
+        </div>
+
+        <div id="resultbox" class="row hidden">
+            <div class="span4">
+                <p>
+                    <span class="label label-success">Image successfully hidden</span>
+                    Your image was minimised and hidden in the <a href="http://en.wikipedia.org/wiki/Lenna">famous image</a> on the
+                    right. You can download it by right clicking and selecting "Save image as". You can now send the
+                    image to a friend and he can discover your secret by dropping the image to the
+                    <a href="/decrypt">decryption page</a>.
+                </p>
+            </div>
+            <div class="span4">
+                <div id="container" class="canvas_container hidden">
+                    <h2>Container Image</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
+                <div id="original" class="canvas_container">
+                    <h2>Uploaded Image (minified)</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
+            </div>
+            <div class="span4">
+                <div id="encrypted" class="canvas_container">
+                    <h2>Image with hidden image</h2>
+                    <canvas width="300" height="300" class="thumbnail"></canvas>
+                </div>
             </div>
         </div>
     </script>
@@ -111,10 +136,10 @@
         </div>
         <div id="resultbox" class="row hidden">
             <div class="span4"><p>
-                <span class="label label-info">Info</span>
+                <span class="label label-success">Text successfully hidden</span>
                 Your text was hidden in the <a href="http://en.wikipedia.org/wiki/Lenna">famous image</a> on the
                 right. You can download it by right clicking and selecting "Save image as". You can now send the
-                image to a friend and he can discover your secret by dropping it to the
+                image to a friend and he can discover your secret by dropping the image to the
                 <a href="/decrypt">decryption page</a>.
             </p>
             </div>
