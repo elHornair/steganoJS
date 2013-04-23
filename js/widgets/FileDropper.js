@@ -45,6 +45,10 @@ YUI.add('file-dropper', function (Y) {
             e.preventDefault();
         },
 
+         _handleDragOver: function (e) {
+             this.get('contentBox').addClass('over');
+        },
+
         _handleFileDrop: function (e, inst) {
             var files = e._event.dataTransfer.files,
                 file,
@@ -77,6 +81,7 @@ YUI.add('file-dropper', function (Y) {
 
         bindUI: function () {
             // add dropbox events
+            this.get('contentBox').once('dragover', this._handleDragOver, this);
             this.get('contentBox').on('dragover', this._handleUnneededEvent, this);
             this.get('contentBox').on('drop', this._handleFileDrop, this);
         }

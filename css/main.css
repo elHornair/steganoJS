@@ -31,10 +31,18 @@ span.label {
 
 #dropbox {
     height: 300px;
+    margin: 20px;
     vertical-align: middle;
     text-align: center;
     line-height: 300px;
     font-size: 3em;
+}
+
+#dropbox.over {
+    background-color: rgb(222, 241, 255);
+    margin: 0;
+    transition: margin .05s;
+    transition-timing-function: ease-in;
 }
 
 #text_input {
